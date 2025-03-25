@@ -8,6 +8,7 @@ const allowedOrigins = [
   "https://saitachain.com:3000",
   "https://rezor.org",
   "https://www.rezor.org",
+  "https://admin.rezor.org/",
   "http://localhost:3000",
   "http://localhost:5173",
   "http://localhost:5174",
