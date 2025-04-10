@@ -11,6 +11,7 @@ import useLoginStore from "./store/useLoginStore";
 
 function App() {
   const { isLoggedIn } = useLoginStore();
+  console.log('v2');
 
   return (
     <Router>
