@@ -207,7 +207,7 @@ function AddBlogs({Title}) {
 
   return (
     <div className="max-w-7xl ml-[22rem] pt-[3.7rem] mr-[5rem] ">
-      <h1 className="text-2xl font-bold text-[#1b00ff]">{Title} Blog</h1>
+      <h1 className="text-2xl font-bold text-[#1b00ff]">{Title} News</h1>
 
       <form onSubmit={handleSubmit} className="mt-8 space-y-6">
         <div className="grid grid-cols-3 gap-6">
