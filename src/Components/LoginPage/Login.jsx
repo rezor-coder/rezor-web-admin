@@ -50,11 +50,11 @@ function Login() {
         toast.success("User logged in successfully");
         navigate("/")
       } else {
-        toast.error("Something went wrong");
+        toast.error(response.message);
       }
     } catch (e) {
-      console.log("Error:", e.message);
-      toast.error("Something went wrong");
+      console.log("Error:", e.response.data.message);
+      toast.error(e.response.data.message);
     }
   }
   return (
@@ -72,7 +72,7 @@ function Login() {
             <h2 className="mb-6 text-2xl font-bold text-center text-[#1b00ff]">
               Login To Admin Panel
             </h2>
-            <div onSubmit={Loginfunction}>
+            <div >
               <div className="relative mb-4">
                 <input
                   required
@@ -112,7 +112,7 @@ function Login() {
               </div>
               <button
                 onClick={Loginfunction}
-                type="submit"
+                type="button"
                 className="w-full px-4 py-2 text-white bg-[#1b00ff] rounded-md hover:bg-[#1502bd] focus:outline-none"
               >
                 Sign In
