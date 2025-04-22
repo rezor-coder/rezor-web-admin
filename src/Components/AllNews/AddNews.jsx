@@ -166,7 +166,7 @@ function AddNews({Title}) {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/V1/getCategories`, {
+        const response = await axios.get(`${API_BASE_URL}/V1/getNewsCategories`, {
           headers: {
             'Authorization': `Bearer ${sessionStorage.getItem("token")}`
           },
