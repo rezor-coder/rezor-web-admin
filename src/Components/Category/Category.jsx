@@ -140,7 +140,7 @@ function Category() {
   return (
     <div className="max-w-7xl ml-[22rem] pt-[3.7rem] mr-[5rem] ">
       <div className="flex justify-between mb-5">
-        <h1 className="text-2xl font-bold text-[#1b00ff]">All Category</h1>
+        <h1 className="text-2xl font-bold text-[#1b00ff]">All Blog Category</h1>
         <div className="">
           <button
             type="button"

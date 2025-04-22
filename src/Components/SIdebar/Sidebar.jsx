@@ -39,8 +39,18 @@ function Sidebar() {
             </Link>
           </li>
           <li className="w-full">
+            <Link to="/allNews" className="block w-full">
+              <h1>All News</h1>
+            </Link>
+          </li>
+          <li className="w-full">
             <Link to="/Category" className="block w-full">
-              <h1>Category</h1>
+              <h1>Blog Category</h1>
+            </Link>
+          </li>
+          <li className="w-full">
+            <Link to="/newsCategory" className="block w-full">
+              <h1>News Category</h1>
             </Link>
           </li>
         </ul>

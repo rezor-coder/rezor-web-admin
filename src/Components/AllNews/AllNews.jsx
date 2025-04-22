@@ -49,19 +49,19 @@ const ActionPopup = ({ id, onEdit, onDelete, onClose }) => {
 
 const ITEMS_PER_PAGE = 10;
 
-function AllBlogs() {
+function AllNews() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [showPopupId, setShowPopupId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1); 
 
 
-  const [blogs, setBlogs] = useState([]);
+  const [news, setNews] = useState([]);
 
-  console.log("blos", blogs);
+  console.log("news", news);
 
   const handleAddNew = () => {
-    navigate("/addBlog");
+    navigate("/addNews");
   };
 
   const togglePopup = (id) => {
@@ -89,9 +89,9 @@ function AllBlogs() {
   };
 
   useEffect(() => {
-    const fetchBlogs = async () => {
+    const fetchNews = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/V1/getBlogs`, {
+        const response = await axios.get(`${API_BASE_URL}/V1/getNews`, {
           headers: {
             'Authorization': `Bearer ${sessionStorage.getItem("token")}`
           },
@@ -99,66 +99,70 @@ function AllBlogs() {
         });
 
         console.log("responseee", response);
-        if (response.status === 400 || response.status === 401) {
-          sessionStorage.clear();
-          location.href = "/";
-        }
+        // if (response.status === 400 || response.status === 401) {
+        //   sessionStorage.clear();
+        //   location.href = "/";
+        // }
         if (response.status === 200) {
-          setBlogs(response.data.data || []);
+          setNews(response.data.data || []);
         } else {
-          console.error("Failed to fetch Blogs:", response.status);
+          console.error("Failed to fetch News:", response.status);
         }
       } catch (error) {
         console.log("errrr", error);
-        if (error.response && error.response.status >= 400) {
-          sessionStorage.clear();
-          location.href = "/";
-        }
+        // if (error.response && error.response.status >= 400) {
+        //   sessionStorage.clear();
+        //   location.href = "/";
+        // }
       }
     };
 
-    fetchBlogs();
+    fetchNews();
   }, []);
 
-  const deleteBlog = async (id) => {
+  const deleteNews = async (id) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/V1/DeleteBlog/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/V1/DeleteNews/${id}`, {
         method: "DELETE",
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
       });
-      if (!response.ok) throw new Error("Failed to delete the blog.");
 
-      setBlogs(blogs.filter((blog) => blog.id !== id));
+      console.log("response");
+      console.log(response);
+      
+      if (!response.ok) throw new Error("Failed to delete the news.");
 
-      toast.success("Blog deleted successfully");
+      setNews(news.filter((nes) =>  nes.id !== id));
+
+      toast.success("News deleted successfully");
     } catch (error) {
-      console.error("Error deleting blog:", error);
-      toast.error(`Error deleting blog: ${error.message}`, {
+      console.error("Error deleting news:", error);
+      toast.error(`Error deleting news: ${error.message}`, {
         style: { backgroundColor: "red", color: "white" },
       });
     }
   };
 
-  const editBlog = (blogId) => {
-    navigate(`/addBlog/${blogId}`);
+  const editNews = (newsId) => {
+    navigate(`/addNews/${newsId}`);
   };
 
-  const filteredBlogs = blogs.filter((blog) =>
-    blog?.Name.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredNews = news.filter((nes) =>
+    nes?.Name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const totalPages = Math.ceil(filteredBlogs.length / ITEMS_PER_PAGE);
-  const indexOfLastBlog = currentPage * ITEMS_PER_PAGE;
-  const indexOfFirstBlog = indexOfLastBlog - ITEMS_PER_PAGE;
-  const currentBlogs = filteredBlogs.slice(indexOfFirstBlog, indexOfLastBlog);
+  const totalPages = Math.ceil(filteredNews.length / ITEMS_PER_PAGE);
+  const indexOfLastNews = currentPage * ITEMS_PER_PAGE;
+  const indexOfFirstNews = indexOfLastNews - ITEMS_PER_PAGE;
+  const currentNews = filteredNews.slice(indexOfFirstNews, indexOfLastNews);
 
   return (
     <div className="max-w-7xl ml-[22rem] pt-[3.7rem] mr-[5rem] ">
       <div className="flex justify-between mb-5">
-        <h1 className="text-2xl font-bold text-[#1b00ff]">All Blogs</h1>
+        <h1 className="text-2xl font-bold text-[#1b00ff]">All News</h1>
         <div className="">
           <button
             onClick={handleAddNew}
@@ -202,10 +206,10 @@ function AllBlogs() {
             </tr>
           </thead>
           <tbody>
-            {currentBlogs.length > 0 ? (
-              currentBlogs.map((blog, index) => (
+            {currentNews.length > 0 ? (
+              currentNews.map((news, index) => (
                 <tr
-                  key={blog.id}
+                  key={news.id}
                   className="text-center transition duration-200 hover:bg-gray-100"
                 >
                   <td className="border ">
@@ -213,33 +217,33 @@ function AllBlogs() {
                   </td>
                   <td className="flex justify-center px-0 py-2 border">
                     <img
-                      src={blog.Photo}
-                      alt={blog.Name}
+                      src={news.Photo}
+                      alt={news.Name}
                       className="object-contain w-20 h-20 rounded"
                     />
                   </td>
-                  <td className="border ">{blog.Name}</td>
+                  <td className="border ">{news.Name}</td>
                   <td className="border">
                     <span
-                      className={`text-white text-sm font-semibold py-1 px-2 rounded-md ${blog.Active ? "bg-green-500" : "bg-red-500"
+                      className={`text-white text-sm font-semibold py-1 px-2 rounded-md ${news.Active ? "bg-green-500" : "bg-red-500"
                         }`}
                     >
-                      {blog.Active ? "Active" : "Inactive"}
+                      {news.Active ? "Active" : "Inactive"}
                     </span>
                   </td>
                   <td className="border ">
-                    {new Date(blog.createdAt).toLocaleDateString()}
+                    {new Date(news.createdAt).toLocaleDateString()}
                   </td>
                   <td className="relative translate-x-1/2 border">
                     <HiDotsVertical
                       className="cursor-pointer"
-                      onClick={() => togglePopup(blog.id)}
+                      onClick={() => togglePopup(news.id)}
                     />
-                    {showPopupId === blog.id && (
+                    {showPopupId === news.id && (
                       <ActionPopup
-                        id={blog.id}
-                        onEdit={editBlog}
-                        onDelete={deleteBlog}
+                        id={news.id}
+                        onEdit={editNews}
+                        onDelete={deleteNews}
                         onClose={onClose}
                       />
                     )}
@@ -249,7 +253,7 @@ function AllBlogs() {
             ) : (
               <tr>
                 <td colSpan="6" className="py-4 text-center">
-                  No blogs found.
+                  No news found.
                 </td>
               </tr>
             )}
@@ -296,4 +300,4 @@ function AllBlogs() {
   );
 }
 
-export default AllBlogs;
+export default AllNews;

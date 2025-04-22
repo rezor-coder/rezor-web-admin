@@ -10,11 +10,12 @@ import { API_BASE_URL } from "../../config";
 import Select from "react-select";
 import useLoginStore from "../../store/useLoginStore";
 
-function AddBlogs({Title}) {
+function AddNews({Title}) {
   const { logout } = useLoginStore();
 
   const navigate = useNavigate();
   const { id } = useParams();
+  const [_id,setId] = useState(id);
   const [categories, setCategories] = useState([]);
   const [formValues, setFormValues] = useState({
     Name: "",
@@ -59,7 +60,7 @@ function AddBlogs({Title}) {
 
       // Omitting headers as axios handles multipart/form-data automatically
       const response = await axios.post(
-        `${API_BASE_URL}/V1/uploadImage`,
+        `${API_BASE_URL}/V1/uploadNewsImage`,
         formData,
         {
           withCredentials: true,
@@ -109,10 +110,15 @@ function AddBlogs({Title}) {
     e.preventDefault();
     const slug = generateSlug(formValues.slug)
     const updatedFormValues = { ...formValues, Detail: quillContent, slug };
+    
     const API_URL = id
-      ? `${API_BASE_URL}/V1/updateBlog/${id}`
-      : `${API_BASE_URL}/V1/addBlog`;
+      ? `${API_BASE_URL}/V1/updateNews/${_id}`
+      : `${API_BASE_URL}/V1/addNews`;
     const method = id ? "PUT" : "POST";
+
+    console.log("updatedFormValues");
+    console.log(updatedFormValues);
+    
     console.log('------form data', JSON.stringify(updatedFormValues))
     try {
       const response = await fetch(API_URL, {
@@ -127,9 +133,12 @@ function AddBlogs({Title}) {
 
       const data = await response.json();
 
+      console.log("data");
+      console.log(data);
+      
       if (response.ok) {
-        toast.success(`${id ? "Blog updated" : "Blog created"}:`, data);
-        navigate("/");
+        toast.success(`${id ? "News updated" : "News created"}:`, data);
+        // navigate("/allNews");
       } else {
         console.log(`Received status code: ${response.status}`);
         if (response.status === 401 || response.status === 400) {
@@ -142,7 +151,7 @@ function AddBlogs({Title}) {
           
         } else {
           toast.error(
-            `Failed to ${id ? "update" : "create"} blog: ${data.message}`
+            `Failed to ${id ? "update" : "create"} news: ${data.message}`
           );
         }
       }
@@ -177,10 +186,10 @@ function AddBlogs({Title}) {
   }, []);
 
   useEffect(() => {
-    const fetchBlogData = async () => {
+    const fetchNewsData = async () => {
       if (id) {
         try {
-          const response = await fetch(`${API_BASE_URL}/V1/getBlogById/${id}`, {
+          const response = await fetch(`${API_BASE_URL}/V1/getNewsById/${id}`, {
             method: "GET",
             withCredentials: true,
             credentials: "include",
@@ -193,21 +202,22 @@ function AddBlogs({Title}) {
             const data = await response.json();
             setFormValues(data.data);
             setQuillContent(data.data.Detail);
+            setId(data.data._id);
           } else {
-            console.error("Failed to load blog data:", response.statusText);
+            console.error("Failed to load news data:", response.statusText);
           }
         } catch (error) {
-          console.error("Error fetching blog data:", error);
+          console.error("Error fetching news data:", error);
         }
       }
     };
 
-    fetchBlogData();
+    fetchNewsData();
   }, [id]);
 
   return (
     <div className="max-w-7xl ml-[22rem] pt-[3.7rem] mr-[5rem] ">
-      <h1 className="text-2xl font-bold text-[#1b00ff]">{Title} Blog</h1>
+      <h1 className="text-2xl font-bold text-[#1b00ff]">{Title} News</h1>
 
       <form onSubmit={handleSubmit} className="mt-8 space-y-6">
         <div className="grid grid-cols-3 gap-6">
@@ -404,4 +414,4 @@ function AddBlogs({Title}) {
   );
 }
 
-export default AddBlogs;
+export default AddNews;
