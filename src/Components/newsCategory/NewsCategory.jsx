@@ -102,7 +102,7 @@ function NewsCategory() {
 
   const deleteCategory = async (id) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/V1/deleteCategory/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/V1/deleteNewsCategory/${id}`, {
         method: "DELETE",
         withCredentials: true,
         credentials: 'include',

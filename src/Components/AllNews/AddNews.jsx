@@ -131,6 +131,8 @@ function AddNews({Title}) {
         body: JSON.stringify(updatedFormValues),
       });
 
+
+    
       const data = await response.json();
 
       console.log("data");
@@ -138,10 +140,13 @@ function AddNews({Title}) {
       
       if (response.ok) {
         toast.success(`${id ? "News updated" : "News created"}:`, data);
-        // navigate("/allNews");
+        navigate("/allNews");
       } else {
         console.log(`Received status code: ${response.status}`);
         if (response.status === 401 || response.status === 400) {
+          alert(
+            "Session expired or invalid credentials. Please log in again."
+          );
           toast.error(
             "Session expired or invalid credentials. Please log in again."
           );
@@ -150,6 +155,7 @@ function AddNews({Title}) {
           // navigate("/Login");
           
         } else {
+          alert(`Failed to ${id ? "update" : "create"} news: ${data.message}`);
           toast.error(
             `Failed to ${id ? "update" : "create"} news: ${data.message}`
           );
@@ -157,6 +163,7 @@ function AddNews({Title}) {
       }
     } catch (error) {
       console.error("hello" + JSON.stringify(error));
+      alert(error.message);
       toast.error(
         error.message
       );
