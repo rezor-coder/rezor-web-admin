@@ -68,7 +68,7 @@ function AddNewsCategory() {
     const fetchCategoryData = async () => {
       
 
-      console.log(`${API_BASE_URL}/V1/public/getNewsCategoryById/${id}`);
+      console.log(`${API_BASE_URL}/V1/public/getByNewsCategoryId/${id}`);
       
       if (id) {
         try {
@@ -117,7 +117,7 @@ function AddNewsCategory() {
               className="w-full p-2 mt-1 border rounded-md"
               placeholder="Enter Name"
               name="Name"
-              value={formValues.Name}
+              value={formValues?.Name}
               onChange={handleChange}
             />
           </div>
@@ -126,7 +126,7 @@ function AddNewsCategory() {
           <input
             type="checkbox"
             name="Active"
-            checked={formValues.Active}
+            checked={formValues?.Active}
             onChange={(e) =>
               setFormValues({ ...formValues, Active: e.target.checked })
             }

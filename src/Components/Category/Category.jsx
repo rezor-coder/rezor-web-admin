@@ -101,6 +101,8 @@ function Category() {
   }, []);
 
   const deleteCategory = async (id) => {
+    if(confirm('Are you sure want to delete')){
+
     try {
       const response = await fetch(`${API_BASE_URL}/V1/deleteCategory/${id}`, {
         method: "DELETE",
@@ -120,6 +122,7 @@ function Category() {
     } catch (error) {
       toast.error("Error deleting category:", error);
     }
+  }
   };
 
   const editCategory = (categoryId) => {

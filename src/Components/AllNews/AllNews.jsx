@@ -121,6 +121,7 @@ function AllNews() {
   }, []);
 
   const deleteNews = async (id) => {
+    if(confirm('Are you sure want to delete')){
     try {
       const response = await fetch(`${API_BASE_URL}/V1/DeleteNews/${id}`, {
         method: "DELETE",
@@ -144,6 +145,7 @@ function AllNews() {
         style: { backgroundColor: "red", color: "white" },
       });
     }
+  }
   };
 
   const editNews = (newsId) => {

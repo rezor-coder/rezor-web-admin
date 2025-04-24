@@ -16,6 +16,7 @@ function AddNews({Title}) {
   const navigate = useNavigate();
   const { id } = useParams();
   const [_id,setId] = useState(id);
+  const [isDisabled,setIsDisabled] = useState(false);
   const [categories, setCategories] = useState([]);
   const [formValues, setFormValues] = useState({
     Name: "",
@@ -43,6 +44,8 @@ function AddNews({Title}) {
   };
   const handleImageUpload = async (event) => {
     try {
+
+      setIsDisabled(true);
       const file = event.target.files[0];
       if (!file) {
         console.error("No file selected.");
@@ -75,13 +78,17 @@ function AddNews({Title}) {
           [type]: newImageUrl,
         }));
       } else {
+        toast.error("Failed to upload image. No URL returned from the server.");
         console.error(
           "Failed to upload image. No URL returned from the server."
         );
       }
+      setIsDisabled(false);
+
     } catch (error) {
       console.error("Error uploading image: ", error);
       toast.error("Failed to upload image");
+      setIsDisabled(false);
     }
   };
 
@@ -108,11 +115,16 @@ function AddNews({Title}) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    setIsDisabled(true);
     const slug = generateSlug(formValues.slug)
     const updatedFormValues = { ...formValues, Detail: quillContent, slug };
     
+    // console.log(`${API_BASE_URL}/V1/updateNews/${_id}`);
+    
+
     const API_URL = id
-      ? `${API_BASE_URL}/V1/updateNews/${_id}`
+      ? `${API_BASE_URL}/V1/updateNews/${id}`
       : `${API_BASE_URL}/V1/addNews`;
     const method = id ? "PUT" : "POST";
 
@@ -135,8 +147,6 @@ function AddNews({Title}) {
     
       const data = await response.json();
 
-      console.log("data");
-      console.log(data);
       
       if (response.ok) {
         toast.success(`${id ? "News updated" : "News created"}:`, data);
@@ -144,9 +154,9 @@ function AddNews({Title}) {
       } else {
         console.log(`Received status code: ${response.status}`);
         if (response.status === 401 || response.status === 400) {
-          alert(
-            "Session expired or invalid credentials. Please log in again."
-          );
+          // alert(
+          //   "Session expired or invalid credentials. Please log in again."
+          // );
           toast.error(
             "Session expired or invalid credentials. Please log in again."
           );
@@ -155,18 +165,20 @@ function AddNews({Title}) {
           // navigate("/Login");
           
         } else {
-          alert(`Failed to ${id ? "update" : "create"} news: ${data.message}`);
+          // alert(`Failed to ${id ? "update" : "create"} news: ${data.message}`);
           toast.error(
             `Failed to ${id ? "update" : "create"} news: ${data.message}`
           );
         }
       }
+      setIsDisabled(false);
     } catch (error) {
       console.error("hello" + JSON.stringify(error));
-      alert(error.message);
+      // alert(error.message);
       toast.error(
         error.message
       );
+      setIsDisabled(false);
     }
   };
 
@@ -205,8 +217,12 @@ function AddNews({Title}) {
             },
           });
 
+          
+
           if (response.status === 200) {
             const data = await response.json();
+              console.log(data.data);
+              
             setFormValues(data.data);
             setQuillContent(data.data.Detail);
             setId(data.data._id);
@@ -278,7 +294,7 @@ function AddNews({Title}) {
               className="w-full p-2 mt-1 border rounded-md"
               type="date"
               name="Date"
-              value={formValues.Date}
+              value={formValues?.Date}
               onChange={handleChange}
             />
           </div>
@@ -412,9 +428,9 @@ function AddNews({Title}) {
         <button
           type="submit"
           className="bg-[#00aff0] hover:bg-[#44cdff] flex items-center text-white text-md px-6 py-2 rounded-md"
-        >
+        disabled={isDisabled}>
           <FiSend size={20} className="mr-2" />
-          Save
+          {isDisabled ? 'Processing' : 'Save'}
         </button>
       </form>
     </div>

@@ -121,6 +121,7 @@ function AllBlogs() {
   }, []);
 
   const deleteBlog = async (id) => {
+    if(confirm('Are you sure want to delete')){
     try {
       const response = await fetch(`${API_BASE_URL}/V1/DeleteBlog/${id}`, {
         method: "DELETE",
@@ -140,6 +141,7 @@ function AllBlogs() {
         style: { backgroundColor: "red", color: "white" },
       });
     }
+  }
   };
 
   const editBlog = (blogId) => {

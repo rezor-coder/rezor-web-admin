@@ -87,6 +87,7 @@ function NewsCategory() {
         const response = await axios.get(`${API_BASE_URL}/V1/getNewsCategories`, {
           withCredentials: true,
         });
+        
         if (response.status === 200) {
           setCategories(response.data.data);
         } else {
@@ -101,6 +102,7 @@ function NewsCategory() {
   }, []);
 
   const deleteCategory = async (id) => {
+    if(confirm('Are you sure want to delete')){
     try {
       const response = await fetch(`${API_BASE_URL}/V1/deleteNewsCategory/${id}`, {
         method: "DELETE",
@@ -121,7 +123,9 @@ function NewsCategory() {
     } catch (error) {
       toast.error("Error deleting category:", error);
     }
+  }
   };
+
 
   const editCategory = (categoryId) => {
     navigate(`/addNewsCategory/${categoryId}`);
